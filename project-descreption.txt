@@ -1,0 +1,80 @@
+We are planning to do these challange as our first step:
+Note that the picture is taken by Hammer satallite with RGB colors
+
+### ✅ Step 1: **Preprocess**
+1. **Convert to grayscale or use Y channel only** (space images often benefit from this).
+2. **Denoise** using:
+   - `cv2.fastNlMeansDenoising()` or
+   - `skimage.restoration.denoise_wavelet()`
+
+```python
+from skimage import io
+from skimage.restoration import denoise_wavelet
+img = io.imread("earth.jpg", as_gray=True)
+denoised = denoise_wavelet(img, multichannel=False)
+```
+
+---
+
+### ✅ Step 2: **Use ESRGAN or Real-ESRGAN (Trained on Natural/Remote Sensing Images)**
+
+🧠 If you're serious, try **custom-trained Real-ESRGAN** models for remote sensing:
+
+- 🔗 **Pretrained ESRGAN for Satellite Images**:
+  - [https://github.com/TencentARC/Real-ESRGAN](https://github.com/TencentARC/Real-ESRGAN)
+  - Look for or train on **space / remote sensing datasets** like:
+    - UC Merced Land Use Dataset
+    - SpaceNet
+    - EuroSAT
+
+🔧 **Run Real-ESRGAN CLI**:
+```bash
+python inference_realesrgan.py -n RealESRGAN_x4plus -i input.jpg --outscale 4
+```
+
+---
+
+### ✅ Step 3: **Postprocess**
+1. **Contrast stretch** to enhance subtle features:
+```python
+from skimage import exposure
+adjusted = exposure.rescale_intensity(upscaled_img)
+```
+
+2. **Edge enhancement or high-pass filtering** (for clouds, terrain outlines):
+```python
+kernel = np.array([[-1,-1,-1], [-1, 9,-1], [-1,-1,-1]])
+sharpened = cv2.filter2D(upscaled_img, -1, kernel)
+```
+
+---
+
+### ✅ Step 4: **Scientific Color Calibration**
+- If you're working with multispectral bands (like Sentinel or MODIS), align and color-correct.
+- Use **false-color mapping** if needed (for infrared, etc.).
+
+---
+
+## 🛰️ Specialized AI Models for Earth/Space Images
+
+If you're training your own or searching GitHub:
+
+| Model              | Notes |
+|--------------------|-------|
+| **DCSCN / FSRCNN** | Lightweight models, used in satellite super-res research |
+| **HiFiSR**         | High-fidelity SR with fidelity loss – ideal for preserving scientific detail |
+| **ESRGAN (with Earth dataset)** | Great if retrained on Earth or Space datasets |
+| **DUF (Deep Video SR)** | For enhancing satellite video frames |
+
+---
+
+## 🧠 Summary for Earth/Space Images
+
+| Stage         | Tool / Model                | Goal                              |
+|---------------|-----------------------------|-----------------------------------|
+| Denoising     | OpenCV / skimage             | Remove sensor noise               |
+| Upscaling     | Real-ESRGAN (Earth-tuned)    | Sharp, accurate 4x resolution     |
+| Postprocess   | Sharpen + Contrast Stretch   | Enhance terrain / cloud features |
+| Calibration   | Color correction (optional)  | For multispectral / RGB bands     |
+
+Following that we want to find the areas that has Copper (Cu):
