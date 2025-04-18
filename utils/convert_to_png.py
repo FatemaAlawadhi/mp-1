@@ -29,7 +29,7 @@ def main():
     files_to_convert = [
         "TCI_COG.tiff",
         "enhanced_TCI_COG.tiff",
-        "copper_mask_TCI_COG.tiff"
+        "CARBON_mask_TCI_COG.tiff"
     ]
     
     # Convert each file

@@ -8,10 +8,10 @@ UTILS_DIR = BASE_DIR / "utils"
 
 # Input/Output file names
 INPUT_IMAGE = "enhanced_TCI_COG.tiff"  # Using enhanced image as input
-COPPER_MASK = "copper_mask_TCI_COG.tiff"
+CARBON_MASK = "cARBON_mask_TCI_COG.tiff"
 
 # Copper detection parameters
-COPPER_DETECTION = {
+CARBON_DETECTION = {
     "spectral_bands": {
         "red": (600, 700),    # nm
         "green": (500, 600),  # nm

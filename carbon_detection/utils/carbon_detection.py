@@ -33,8 +33,8 @@ def extract_spectral_features(image, spectral_bands):
     
     return np.array(features)
 
-def detect_copper_regions(image, threshold=0.7, min_area=100):
-    """Detect copper-rich regions in the image."""
+def detect_carbon_regions(image, threshold=0.5, min_area=50):
+    """Detect carbon-rich regions in the image."""
     # Convert image to appropriate format if needed
     if len(image.shape) == 3:
         image = np.mean(image, axis=2)
@@ -59,7 +59,7 @@ def detect_copper_regions(image, threshold=0.7, min_area=100):
     
     return mask
 
-def classify_copper_regions(image, n_clusters=2):
+def classify_carbon_regions(image, n_clusters=3):
     """Classify regions using K-means clustering."""
     # Reshape image for clustering
     h, w = image.shape[:2]
@@ -73,21 +73,21 @@ def classify_copper_regions(image, n_clusters=2):
     return labels.reshape(h, w)
 
 def process_image(image, params):
-    """Complete copper detection pipeline."""
+    """Complete carbon detection pipeline."""
     # Extract spectral features
     features = extract_spectral_features(image, params['spectral_bands'])
     
-    # Detect copper regions
-    mask = detect_copper_regions(
+    # Detect carbon regions
+    mask = detect_carbon_regions(
         image,
         threshold=params['threshold'],
         min_area=params['min_area']
     )
     
     # Classify regions
-    classified = classify_copper_regions(
+    classified = classify_carbon_regions(
         mask,
         n_clusters=params['n_clusters']
     )
     
-    return classified 
+    return classified
