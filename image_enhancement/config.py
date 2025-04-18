@@ -28,4 +28,9 @@ ENHANCEMENT_PARAMS = {
 
 # Model paths
 MODEL_DIR = BASE_DIR / "models"
-REALESRGAN_MODEL = MODEL_DIR / "RealESRGAN_x4plus.pth" 
+REALESRGAN_MODEL = MODEL_DIR / "realesr-general-x4v3.pth"
+ESRGAN_PARAMS = {
+    "tile_size": 1024,        # Size of tiles for processing large images
+    "tile_padding": 32,       # Padding to prevent seam artifacts
+    "use_gpu": True          # Whether to use GPU if available
+}

@@ -19,8 +19,11 @@ pip install numpy opencv-python scikit-image imagecodecs pywavelets
 echo "Installing PyTorch..."
 pip install torch torchvision
 
+echo "Installing Real-ESRGAN dependencies..."
+pip install basicsr facexlib
+
 echo "Installing remaining packages..."
-pip install tifffile matplotlib pandas scikit-learn
+pip install tifffile matplotlib pandas scikit-learn basicsr facexlib pywavelets
 
 # Create necessary directories
 echo -e "\n[3/5] Creating directory structure..."
@@ -34,14 +37,19 @@ if [ ! -f "figures/TCI_COG.tiff" ]; then
     exit 1
 fi
 
+# Check for CUDA availability
+echo -e "\n[4/5] Checking CUDA availability..."
+if ! python -c "import torch; assert torch.cuda.is_available(), 'CUDA is not available'"; then
+    echo "Error: CUDA is not available. This model requires a GPU to run."
+    exit 1
+fi
+
 # Run image enhancement
-echo -e "\n[4/5] Running image enhancement..."
+echo -e "\n[5/5] Running image enhancement..."
 if python image_enhancement/main.py; then
     echo "Image enhancement completed successfully"
 else
     echo "Error during image enhancement!"
-    echo "Please check if all dependencies are installed correctly."
-    echo "Try running: pip install pywavelets"
     exit 1
 fi
 
@@ -68,4 +76,4 @@ echo "Process completed successfully!"
 echo "Enhanced image saved as: figures/enhanced_TCI_COG.tiff"
 echo "Copper mask saved as: figures/copper_mask_TCI_COG.tiff"
 echo "PNG versions saved in: figures/png/"
-echo "=============================================" 
+echo "============================================="

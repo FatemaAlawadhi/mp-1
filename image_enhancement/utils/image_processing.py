@@ -74,12 +74,40 @@ def sharpen_image(image, kernel):
     """Sharpen image using specified kernel."""
     return cv2.filter2D(image, -1, np.array(kernel))
 
-def upscale_image(image, scale_factor=2):
-    """Upscale image using bicubic interpolation."""
-    height, width = image.shape[:2]
-    new_height = height * scale_factor
-    new_width = width * scale_factor
-    return cv2.resize(image, (new_width, new_height), interpolation=cv2.INTER_CUBIC)
+import os
+import sys
+
+# Add the project root directory to Python path for absolute imports
+sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
+
+from image_enhancement.utils.esrgan import ESRGANUpscaler
+from image_enhancement.config import REALESRGAN_MODEL, ESRGAN_PARAMS
+from pathlib import Path
+
+_esrgan_instance = None
+
+def get_esrgan():
+    """Singleton pattern to reuse ESRGAN model instance."""
+    global _esrgan_instance
+    if _esrgan_instance is None:
+        _esrgan_instance = ESRGANUpscaler(REALESRGAN_MODEL)
+    return _esrgan_instance
+
+def upscale_image(image, scale_factor=4):
+    """Upscale image using Real-ESRGAN."""
+    try:
+        # Get ESRGAN instance
+        upscaler = get_esrgan()
+        
+        # Use ESRGAN for upscaling
+        return upscaler.upscale(
+            image,
+            tile_size=ESRGAN_PARAMS["tile_size"],
+            tile_padding=ESRGAN_PARAMS["tile_padding"]
+        )
+    except RuntimeError as e:
+        print(f"Error: {str(e)}")
+        raise
 
 def preprocess_image(image, denoise_params):
     """Complete preprocessing pipeline."""
@@ -92,4 +120,4 @@ def preprocess_image(image, denoise_params):
     # Enhance contrast
     enhanced = enhance_contrast(denoised)
     
-    return enhanced 
+    return enhanced
