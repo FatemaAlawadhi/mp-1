@@ -3,7 +3,7 @@ setlocal enabledelayedexpansion
 
 :: Print header
 echo =============================================
-echo Satellite Image Enhancement and Carbon Detection
+echo Satellite Image Enhancement, Carbon and Fire Detection
 echo =============================================
 
 :: Create and activate virtual environment
@@ -31,6 +31,7 @@ echo [3/5] Creating directory structure...
 if not exist figures mkdir figures
 if not exist image_enhancement\models mkdir image_enhancement\models
 if not exist Carbon_detection\models mkdir Carbon_detection\models
+if not exist fire_detection\models mkdir fire_detection\models
 
 :: Check if input image exists
 if not exist "figures\TCI_COG.tiff" (
@@ -40,7 +41,7 @@ if not exist "figures\TCI_COG.tiff" (
 
 :: Run image enhancement
 echo.
-echo [4/5] Running image enhancement...
+echo [4/7] Running image enhancement...
 python image_enhancement\main.py
 if errorlevel 1 (
     echo Error during image enhancement!
@@ -53,7 +54,7 @@ if errorlevel 1 (
 
 :: Run Carbon detection
 echo.
-echo [5/5] Running Carbon detection...
+echo [5/7] Running Carbon detection...
 python carbon_detection\main.py
 if errorlevel 1 (
     echo Error during Carbon detection!
@@ -62,9 +63,20 @@ if errorlevel 1 (
     echo Carbon detection completed successfully
 )
 
+:: Run Fire detection
+echo.
+echo [6/7] Running Fire detection...
+python fire_detection\main.py
+if errorlevel 1 (
+    echo Error during Fire detection!
+    exit /b 1
+) else (
+    echo Fire detection completed successfully
+)
+
 :: Convert TIFF images to PNG
 echo.
-echo [6/6] Converting images to PNG format...
+echo [7/7] Converting images to PNG format...
 python utils\convert_to_png.py
 if errorlevel 1 (
     echo Error during image conversion!
@@ -78,6 +90,7 @@ echo =============================================
 echo Process completed successfully!
 echo Enhanced image saved as: figures\enhanced_TCI_COG.tiff
 echo Carbon mask saved as: figures\Carbon_mask_TCI_COG.tiff
+echo Fire mask saved as: figures\Fire_mask_TCI_COG.tiff
 echo PNG versions saved in: figures\png\
 echo =============================================
 
