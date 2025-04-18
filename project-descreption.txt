@@ -77,4 +77,4 @@ If you're training your own or searching GitHub:
 | Postprocess   | Sharpen + Contrast Stretch   | Enhance terrain / cloud features |
 | Calibration   | Color correction (optional)  | For multispectral / RGB bands     |
 
-Following that we want to find the areas that has Copper (Cu):
+Following that we want to find the areas that has carbon (Cu):

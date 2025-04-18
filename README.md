@@ -1,6 +1,6 @@
-# Satellite Image Enhancement and Copper Detection
+# Satellite Image Enhancement and Carbon Detection
 
-This project focuses on enhancing satellite imagery and detecting copper-rich areas using advanced image processing techniques.
+This project focuses on enhancing satellite imagery and detecting Carbon-rich areas using advanced image processing techniques.
 
 ## Project Structure
 ```
@@ -10,7 +10,7 @@ This project focuses on enhancing satellite imagery and detecting copper-rich ar
 │   ├── utils/             # Enhancement utilities
 │   ├── config.py          # Enhancement parameters
 │   └── main.py           # Enhancement pipeline
-├── copper_detection/      # Copper detection module
+├── Carbon_detection/      # Carbon detection module
 │   ├── utils/            # Detection utilities
 │   ├── config.py         # Detection parameters
 │   └── main.py          # Detection pipeline
@@ -26,7 +26,7 @@ This project focuses on enhancing satellite imagery and detecting copper-rich ar
    - Contrast enhancement
    - Edge sharpening
    
-2. Copper Detection Module
+2. Carbon Detection Module
    - Spectral analysis
    - Feature extraction
    - Classification
@@ -55,15 +55,15 @@ python image_enhancement/scripts/download_models.py
 ```bash
 python image_enhancement/main.py
 ```
-3. Run the copper detection pipeline:
+3. Run the Carbon detection pipeline:
 ```bash
-python copper_detection/main.py
+python Carbon_detection/main.py
 ```
 
 ## Output
 The processed images will be saved in the `figures` directory with appropriate naming conventions:
 - Enhanced image: `enhanced_TCI_COG.tiff`
-- Copper detection mask: `copper_mask_TCI_COG.tiff`
+- Carbon detection mask: `Carbon_mask_TCI_COG.tiff`
 
 ## Dependencies
 - OpenCV
