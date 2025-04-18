@@ -174,4 +174,4 @@ cython_debug/
 .pypirc
 
 
-figures/TCI_COG.tiff
+figures
