@@ -32,7 +32,7 @@ def create_heatmap(image):
     intensity = np.clip(intensity, 0, 1)
     
     # Apply threshold to identify fire regions
-    fire_mask = intensity > 0.6
+    fire_mask = intensity > 15
     
     # Apply morphological operations to clean up the mask
     kernel = np.ones((5,5), np.uint8)

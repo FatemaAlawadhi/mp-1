@@ -6,12 +6,12 @@ echo "Satellite Image Processing Suite"
 echo "============================================="
 
 # Create and activate virtual environment
-echo -e "\n[1/5] Setting up virtual environment..."
+echo -e "\n[1/6] Setting up virtual environment..."
 python3 -m venv venv
 source venv/bin/activate
 
 # Install packages in batches
-echo -e "\n[2/5] Installing dependencies..."
+echo -e "\n[2/6] Installing dependencies..."
 echo "Installing basic packages..."
 pip install --upgrade pip
 pip install numpy opencv-python scikit-image imagecodecs pywavelets
@@ -23,11 +23,12 @@ echo "Installing remaining packages..."
 pip install tifffile matplotlib pandas scikit-learn
 
 # Create necessary directories
-echo -e "\n[3/5] Creating directory structure..."
+echo -e "\n[3/6] Creating directory structure..."
 mkdir -p figures
 mkdir -p image_enhancement/models
 mkdir -p carbon_detection/models
 mkdir -p fire_detection/models
+mkdir -p drought_detection/models
 
 # Download TCI_COG.tiff from Open Cosmos API if not present
 if [ ! -f "figures/TCI_COG.tiff" ]; then
@@ -49,7 +50,7 @@ python3 fetch_project_data.py
 export PYTHONPATH="$(pwd):$PYTHONPATH"
 
 # Train and run image enhancement
-echo -e "\n[4/5] Running image enhancement..."
+echo -e "\n[4/6] Running image enhancement..."
 # First train the TIFF enhancement model
 if python image_enhancement/models/train_model.py; then
     echo "TIFF enhancement model trained successfully"
@@ -84,8 +85,19 @@ else
     exit 1
 fi
 
+echo "Step 4: Drought Detection"
+cd drought_detection
+if python main.py; then
+    cd ..
+    echo "Drought detection completed successfully"
+else
+    cd ..
+    echo "Error during drought detection!"
+    exit 1
+fi
+
 # Convert TIFF images to PNG
-echo -e "\n[5/5] Converting images to PNG format..."
+echo -e "\n[5/6] Converting images to PNG format..."
 if python utils/convert_to_png.py; then
     echo "Image conversion completed successfully"
 else
@@ -98,5 +110,6 @@ echo "Process completed successfully!"
 echo "Enhanced image saved as: figures/enhanced_TCI_COG.tiff"
 echo "Carbon detection results saved in: figures/carbon_detection/"
 echo "Fire detection results saved in: figures/fire_detection/"
+echo "Drought detection results saved in: figures/drought_detection/"
 echo "PNG versions saved in: figures/png/"
-echo "=============================================" 
+echo "============================================="
