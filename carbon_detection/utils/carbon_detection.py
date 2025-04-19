@@ -2,6 +2,8 @@ import numpy as np
 from skimage import measure
 from sklearn.cluster import KMeans
 import tifffile
+import matplotlib.pyplot as plt
+import cv2
 
 def load_image(image_path):
     """Load image using tifffile for TIFF images."""
@@ -57,7 +59,7 @@ def detect_carbon_regions(image, threshold=0.5, min_area=50):
     for region in valid_regions:
         mask[labels == region.label] = 255
     
-    return mask
+    return mask, image_norm  # Return normalized image for heatmap
 
 def classify_carbon_regions(image, n_clusters=3):
     """Classify regions using K-means clustering."""
@@ -72,13 +74,35 @@ def classify_carbon_regions(image, n_clusters=3):
     # Reshape back to image
     return labels.reshape(h, w)
 
+def create_carbon_heatmap(image_norm, mask, output_path, colormap='YlOrBr'):
+    """
+    Create a standalone heatmap visualization of carbon regions,
+    similar to the drought severity heatmap.
+    """
+    # Create a heatmap where the intensity is based on the normalized image values
+    # but only in regions where the mask is positive
+    heatmap_data = np.zeros_like(image_norm)
+    heatmap_data[mask > 0] = image_norm[mask > 0]
+    
+    # Create the heatmap visualization
+    plt.figure(figsize=(10, 8))
+    plt.imshow(heatmap_data, cmap=colormap)
+    plt.colorbar(label='Carbon Intensity')
+    plt.title('Carbon Concentration Heatmap')
+    plt.axis('off')  # Hide axes for cleaner visualization
+    plt.tight_layout()
+    plt.savefig(output_path, dpi=300, bbox_inches='tight')
+    plt.close()
+    
+    return heatmap_data
+
 def process_image(image, params):
     """Complete carbon detection pipeline."""
     # Extract spectral features
     features = extract_spectral_features(image, params['spectral_bands'])
     
     # Detect carbon regions
-    mask = detect_carbon_regions(
+    mask, image_norm = detect_carbon_regions(
         image,
         threshold=params['threshold'],
         min_area=params['min_area']
@@ -90,4 +114,4 @@ def process_image(image, params):
         n_clusters=params['n_clusters']
     )
     
-    return classified
+    return classified, mask, image_norm, image  # Return original image too

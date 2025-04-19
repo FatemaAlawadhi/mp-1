@@ -100,3 +100,4 @@ echo "Fire detection results saved in: figures/fire_detection/"
 echo "Drought detection results saved in: figures/drought_detection/"
 echo "PNG versions saved in: figures/png/"
 echo "============================================="
+cal

@@ -10,7 +10,7 @@ UTILS_DIR = BASE_DIR / "utils"
 INPUT_IMAGE = "enhanced_TCI_COG.tiff"  # Using enhanced image as input
 CARBON_MASK = "CARBON_mask_TCI_COG.tiff"
 
-# Copper detection parameters
+# Carbon detection parameters
 CARBON_DETECTION = {
     "spectral_bands": {
         "red": (600, 700),    # nm
@@ -18,6 +18,7 @@ CARBON_DETECTION = {
         "blue": (400, 500)    # nm
     },
     "threshold": 0.7,         # Classification threshold
-    "min_area": 100,          # Minimum area for copper detection (pixels)
-    "n_clusters": 2           # Number of clusters for K-means
-} 
+    "min_area": 100,          # Minimum area for carbon detection (pixels)
+    "n_clusters": 2,          # Number of clusters for K-means
+    "heatmap_colormap": "YlOrBr"  # Colormap for heatmap visualization
+}
