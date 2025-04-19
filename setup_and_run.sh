@@ -35,9 +35,17 @@ if [ ! -f "figures/TCI_COG.tiff" ]; then
     exit 1
 fi
 
-# Run image enhancement
-echo -e "\n[4/5] Running image processing pipeline..."
-echo "Step 1: Image Enhancement"
+# Train and run image enhancement
+echo -e "\n[4/5] Running image enhancement..."
+# First train the TIFF enhancement model
+if python image_enhancement/models/train_model.py; then
+    echo "TIFF enhancement model trained successfully"
+else
+    echo "Error during model training!"
+    exit 1
+fi
+
+# Run image enhancement with trained model
 if python image_enhancement/main.py; then
     echo "Image enhancement completed successfully"
 else
