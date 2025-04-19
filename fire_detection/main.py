@@ -3,6 +3,7 @@ import numpy as np
 import os
 from pathlib import Path
 from skimage import io
+from utils.load_project_data import load_project_data
 
 def create_heatmap(image):
     # Convert to float32 for processing
@@ -56,6 +57,13 @@ def create_heatmap(image):
     return result, intensity, fire_mask
 
 def main():
+    # Load project data from API
+    project_data = load_project_data()
+    if project_data is not None:
+        print("[INFO] Project data loaded from project_data.json. Keys:", list(project_data.keys()))
+    else:
+        print("[WARN] Project data not available. Proceeding without API data.")
+
     # Create figures directory if it doesn't exist
     os.makedirs('figures', exist_ok=True)
     os.makedirs('figures/png', exist_ok=True)

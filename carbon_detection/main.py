@@ -8,8 +8,16 @@ from utils.carbon_detection import (
     process_image,
     create_carbon_heatmap
 )
+from utils.load_project_data import load_project_data
 
 def main():
+    # Load project data from API
+    project_data = load_project_data()
+    if project_data is not None:
+        print("[INFO] Project data loaded from project_data.json. Keys:", list(project_data.keys()))
+    else:
+        print("[WARN] Project data not available. Proceeding without API data.")
+
     # Create output directory if it doesn't exist
     FIGURES_DIR.mkdir(exist_ok=True)
     carbon_dir = FIGURES_DIR / "carbon_detection"
