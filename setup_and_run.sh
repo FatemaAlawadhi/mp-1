@@ -29,11 +29,24 @@ mkdir -p image_enhancement/models
 mkdir -p carbon_detection/models
 mkdir -p fire_detection/models
 
-# Check if input image exists
+# Download TCI_COG.tiff from Open Cosmos API if not present
 if [ ! -f "figures/TCI_COG.tiff" ]; then
-    echo "Error: Input image 'figures/TCI_COG.tiff' not found!"
-    exit 1
+    echo "Downloading TCI_COG.tiff from Open Cosmos..."
+    curl -L -o figures/TCI_COG.tiff "https://app.open-cosmos.com/api/data/v0/storage/full/hammer/l1b/2025/03/26/HAMMER_L1B_000001841_20250326105943_20250326105951_EFE6F97D/TCI_COG.tiff"
+    if [ $? -ne 0 ]; then
+        echo "Error: Failed to download TCI_COG.tiff!"
+        exit 1
+    fi
+else
+    echo "figures/TCI_COG.tiff already exists. Skipping download."
 fi
+
+# Fetch project data from Open Cosmos API
+echo "Fetching project data from Open Cosmos API... (Token is already set in fetch_project_data.py)"
+python3 fetch_project_data.py
+
+# Ensure PYTHONPATH includes project root for all scripts
+export PYTHONPATH="$(pwd):$PYTHONPATH"
 
 # Train and run image enhancement
 echo -e "\n[4/5] Running image enhancement..."
